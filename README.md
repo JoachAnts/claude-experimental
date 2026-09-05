@@ -1,27 +1,11 @@
 # claude-experimental
 
-A minimal "Hello, world!" React app, built with [Vite](https://vite.dev/).
-
-## Development
-
-```sh
-npm install
-npm run dev
-```
-
-## Build
-
-```sh
-npm run build
-```
+The "Ladz NZ Trip" itinerary page — a single static HTML page ([`index.html`](index.html))
+for the Queenstown snowboarding + Snow Machine trip.
 
 ## Deployment
 
 Every push to `main` triggers [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml),
-which builds the app and publishes it to GitHub Pages.
+which publishes the repo straight to GitHub Pages (no build step — it's plain HTML/CSS/JS).
 
-Before the first deploy, enable Pages for this repository under
-**Settings → Pages → Build and deployment → Source: GitHub Actions**.
-Once enabled, the site is published at:
-
-https://joachants.github.io/claude-experimental/
+Site: https://joachants.github.io/claude-experimental/

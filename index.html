@@ -1,13 +1,541 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Hello World</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
-</html>
+<title>Ladz NZ Trip</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Karla:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #eff3f5;
+    --surface: #ffffff;
+    --ink: #12181f;
+    --ink-soft: #4b5a66;
+    --border: #d2dbe0;
+    --border-strong: #b6c3ca;
+    --accent-mountain: #2f6690;
+    --accent-mountain-bg: rgba(47, 102, 144, 0.09);
+    --accent-festival: #cc6a34;
+    --accent-festival-bg: rgba(204, 106, 52, 0.1);
+    --accent-travel: #6d7680;
+    --accent-travel-bg: rgba(109, 118, 128, 0.09);
+    --shadow: 0 1px 2px rgba(18, 24, 31, 0.04);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0d1420;
+      --surface: #141d2b;
+      --ink: #e7edf2;
+      --ink-soft: #9dabb7;
+      --border: #263242;
+      --border-strong: #344254;
+      --accent-mountain: #74b6dd;
+      --accent-mountain-bg: rgba(116, 182, 221, 0.12);
+      --accent-festival: #f0975e;
+      --accent-festival-bg: rgba(240, 151, 94, 0.13);
+      --accent-travel: #8b96a3;
+      --accent-travel-bg: rgba(139, 150, 163, 0.12);
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --bg: #0d1420;
+    --surface: #141d2b;
+    --ink: #e7edf2;
+    --ink-soft: #9dabb7;
+    --border: #263242;
+    --border-strong: #344254;
+    --accent-mountain: #74b6dd;
+    --accent-mountain-bg: rgba(116, 182, 221, 0.12);
+    --accent-festival: #f0975e;
+    --accent-festival-bg: rgba(240, 151, 94, 0.13);
+    --accent-travel: #8b96a3;
+    --accent-travel-bg: rgba(139, 150, 163, 0.12);
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Karla", system-ui, sans-serif;
+    font-size: 16px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+  }
+
+  a { color: inherit; }
+
+  .wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 20px 64px;
+  }
+
+  /* ---------- Header ---------- */
+
+  header.hero {
+    padding: 40px 0 20px;
+  }
+
+  .eyebrow {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  h1 {
+    font-family: "Big Shoulders Display", system-ui, sans-serif;
+    font-weight: 900;
+    font-size: clamp(2.6rem, 8vw, 4.2rem);
+    line-height: 0.92;
+    letter-spacing: -0.01em;
+    text-transform: uppercase;
+    margin: 6px 0 10px;
+    text-wrap: balance;
+  }
+
+  .hero-sub {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 18px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 13.5px;
+    color: var(--ink-soft);
+  }
+
+  .hero-sub b { color: var(--ink); font-weight: 500; }
+
+  /* ---------- Legend ---------- */
+
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 16px;
+    margin: 22px 0 6px;
+    font-size: 13px;
+    color: var(--ink-soft);
+  }
+
+  .legend .dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 6px;
+    vertical-align: middle;
+  }
+
+  .dot.mountain { background: var(--accent-mountain); }
+  .dot.festival { background: var(--accent-festival); }
+  .dot.travel { background: var(--accent-travel); }
+
+  /* ---------- Sticky day nav ---------- */
+
+  nav.daynav {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    background: var(--bg);
+    padding: 12px 0;
+    margin-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  nav.daynav .rail {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding: 2px;
+  }
+
+  nav.daynav .rail::-webkit-scrollbar { display: none; }
+
+  nav.daynav a {
+    flex: 0 0 auto;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.03em;
+    text-decoration: none;
+    color: var(--ink-soft);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 6px 12px;
+    white-space: nowrap;
+    transition: color 0.15s, border-color 0.15s, background 0.15s;
+  }
+
+  nav.daynav a:hover,
+  nav.daynav a:focus-visible {
+    color: var(--ink);
+    border-color: var(--border-strong);
+  }
+
+  nav.daynav a.active {
+    color: var(--ink);
+    background: var(--surface);
+    border-color: var(--border-strong);
+    font-weight: 500;
+  }
+
+  nav.daynav a:focus-visible { outline: 2px solid var(--accent-mountain); outline-offset: 2px; }
+
+  /* ---------- Notice ---------- */
+
+  .notice {
+    margin: 20px 0 32px;
+    padding: 14px 16px;
+    border: 1px dashed var(--border-strong);
+    border-radius: 10px;
+    font-size: 13.5px;
+    color: var(--ink-soft);
+  }
+
+  .notice b {
+    display: inline-block;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink);
+    margin-right: 8px;
+  }
+
+  /* ---------- Day cards ---------- */
+
+  .days {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .day {
+    scroll-margin-top: 66px;
+    display: grid;
+    grid-template-columns: 96px 1fr;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    position: relative;
+  }
+
+  .day.today { border-color: var(--accent-festival); }
+
+  .datecol {
+    position: relative;
+    padding: 18px 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 6px;
+    border-right: 1px dashed var(--border-strong);
+  }
+
+  .datecol::before,
+  .datecol::after {
+    content: "";
+    position: absolute;
+    right: -8px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 1px solid var(--border);
+  }
+  .datecol::before { top: -9px; }
+  .datecol::after { bottom: -9px; }
+
+  .weekday {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  .datenum {
+    font-family: "Big Shoulders Display", system-ui, sans-serif;
+    font-weight: 800;
+    font-size: 2.3rem;
+    line-height: 0.9;
+  }
+
+  .today-tag {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent-festival);
+    border: 1px solid var(--accent-festival);
+    border-radius: 999px;
+    padding: 1px 7px;
+  }
+
+  .badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    justify-content: center;
+    margin-top: 4px;
+  }
+
+  .badge {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 2px 6px;
+    border-radius: 5px;
+    white-space: nowrap;
+  }
+
+  .badge.mountain { color: var(--accent-mountain); background: var(--accent-mountain-bg); }
+  .badge.festival { color: var(--accent-festival); background: var(--accent-festival-bg); }
+  .badge.travel { color: var(--accent-travel); background: var(--accent-travel-bg); }
+
+  .content {
+    padding: 18px 20px 20px;
+  }
+
+  .content h2 {
+    font-family: "Big Shoulders Display", system-ui, sans-serif;
+    font-weight: 800;
+    font-size: 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.005em;
+    margin: 0 0 12px;
+    text-wrap: balance;
+  }
+
+  .rows {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: 78px 1fr;
+    gap: 10px;
+    align-items: baseline;
+  }
+
+  .row .label {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    padding-top: 2px;
+  }
+
+  .row .val { font-size: 14.5px; }
+  .row .val b { font-weight: 700; }
+
+  .tbc {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11px;
+    color: var(--ink-soft);
+    border-bottom: 1px dashed var(--border-strong);
+  }
+
+  footer {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+    font-size: 12.5px;
+    color: var(--ink-soft);
+  }
+
+  @media (max-width: 480px) {
+    .day { grid-template-columns: 78px 1fr; }
+    .datenum { font-size: 1.9rem; }
+    .content { padding: 16px 14px 18px; }
+    .row { grid-template-columns: 64px 1fr; }
+  }
+</style>
+
+<div class="wrap">
+
+  <header class="hero">
+    <div class="eyebrow">Snowboarding &amp; Snow Machine · Queenstown, NZ</div>
+    <h1>Ladz NZ Trip</h1>
+    <div class="hero-sub">
+      <span>Arrive <b>Tue Sept 8</b></span>
+      <span>Depart <b>Sun Sept 13</b></span>
+      <span>Mountain: <b>Coronet Peak · The Remarkables</b></span>
+    </div>
+    <div class="legend">
+      <span><span class="dot mountain"></span>Mountain day</span>
+      <span><span class="dot festival"></span>Festival night</span>
+      <span><span class="dot travel"></span>Travel</span>
+    </div>
+  </header>
+
+  <nav class="daynav">
+    <div class="rail" id="rail">
+      <a href="#d1">TUE 8</a>
+      <a href="#d2">WED 9</a>
+      <a href="#d3">THU 10</a>
+      <a href="#d4">FRI 11</a>
+      <a href="#d5">SAT 12</a>
+      <a href="#d6">SUN 13</a>
+    </div>
+  </nav>
+
+  <div class="notice">
+    <b>Heads up</b>Snow Machine's full artist-by-time running order isn't public yet — it drops via the official Snow Machine app closer to the date. Where a night says "TBC," check the app once you land and slot the times in.
+  </div>
+
+  <div class="days" id="days">
+
+    <section class="day" id="d1" data-date="2026-09-08">
+      <div class="datecol">
+        <span class="weekday">Tue</span>
+        <span class="datenum">8</span>
+        <span class="badges"><span class="badge travel">Travel</span></span>
+      </div>
+      <div class="content">
+        <h2>Arrival</h2>
+        <div class="rows">
+          <div class="row"><span class="label">Do</span><span class="val">Fly in, check into the place, sort gear rental if anyone still needs it.</span></div>
+          <div class="row"><span class="label">Dinner</span><span class="val"><b>Fergburger</b> or <b>Flame Bar &amp; Grill</b> — nothing fancy, first night off a flight.</span></div>
+          <div class="row"><span class="label">Drinks</span><span class="val"><b>Little Blackwood</b> — waterfront cocktail bar, Remarkables view, easy pace.</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="day" id="d2" data-date="2026-09-09">
+      <div class="datecol">
+        <span class="weekday">Wed</span>
+        <span class="datenum">9</span>
+        <span class="badges"><span class="badge mountain">Mountain</span></span>
+      </div>
+      <div class="content">
+        <h2>First day on snow</h2>
+        <div class="rows">
+          <div class="row"><span class="label">Ride</span><span class="val">Coronet Peak or The Remarkables — pick based on the day's snow report.</span></div>
+          <div class="row"><span class="label">Après</span><span class="val">Coronet Peak's on-mountain Après Chalet — runs Wed through Sat, straight off the lifts.</span></div>
+          <div class="row"><span class="label">Dinner</span><span class="val"><b>Rata</b> or <b>Public Kitchen &amp; Bar</b></span></div>
+          <div class="row"><span class="label">Drinks</span><span class="val"><b>The Bunker</b> — hidden, cocktail-focused, low-key.</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="day" id="d3" data-date="2026-09-10">
+      <div class="datecol">
+        <span class="weekday">Thu</span>
+        <span class="datenum">10</span>
+        <span class="badges"><span class="badge mountain">Mountain</span><span class="badge festival">Festival</span></span>
+      </div>
+      <div class="content">
+        <h2>Snow Machine — Night 1</h2>
+        <div class="rows">
+          <div class="row"><span class="label">Ride</span><span class="val">Morning session — save some legs for tonight.</span></div>
+          <div class="row"><span class="label">Dinner</span><span class="val"><b>Aosta</b> or <b>Fergburger</b> — quick, before the Main Arena.</span></div>
+          <div class="row"><span class="label">Main Arena</span><span class="val">Confirmed: <b>Hilltop Hoods</b>, <b>Keli Holiday</b>. <span class="tbc">Full running order TBC</span></span></div>
+          <div class="row"><span class="label">After</span><span class="val"><b>Ayrburn</b>'s Manure Room — DJs run Thu–Sat, if there's anything left in the tank.</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="day" id="d4" data-date="2026-09-11">
+      <div class="datecol">
+        <span class="weekday">Fri</span>
+        <span class="datenum">11</span>
+        <span class="badges"><span class="badge mountain">Mountain</span><span class="badge festival">Festival</span></span>
+      </div>
+      <div class="content">
+        <h2>Snow Machine — Night 2</h2>
+        <div class="rows">
+          <div class="row"><span class="label">Ride</span><span class="val">Lighter morning session — two festival nights down, one to go.</span></div>
+          <div class="row"><span class="label">Dinner</span><span class="val"><b>Jervois Steak House</b></span></div>
+          <div class="row"><span class="label">Main Arena</span><span class="val">Confirmed: <b>Nora En Pure</b>. <span class="tbc">Full running order TBC</span></span></div>
+          <div class="row"><span class="label">After</span><span class="val"><b>The Sundeck</b> rooftop, or back to Ayrburn.</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="day" id="d5" data-date="2026-09-12">
+      <div class="datecol">
+        <span class="weekday">Sat</span>
+        <span class="datenum">12</span>
+        <span class="badges"><span class="badge mountain">Mountain</span><span class="badge festival">Festival</span></span>
+      </div>
+      <div class="content">
+        <h2>Snow Machine — Closing night</h2>
+        <div class="rows">
+          <div class="row"><span class="label">Ride</span><span class="val">Last run of the trip — make it count.</span></div>
+          <div class="row"><span class="label">Dinner</span><span class="val"><b>Botswana Butchery</b> or <b>True South Dining Room</b> — the nice send-off dinner.</span></div>
+          <div class="row"><span class="label">Main Arena</span><span class="val">Closing night. <span class="tbc">Full lineup TBC</span> — still to be slotted in across the weekend: Chet Faker, Example, Ninajirachi, Restricted, Illy, Savage, Scribe, Orkestrated, Kanine.</span></div>
+          <div class="row"><span class="label">After</span><span class="val">Sundeck or Ayrburn — one more big one.</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="day" id="d6" data-date="2026-09-13">
+      <div class="datecol">
+        <span class="weekday">Sun</span>
+        <span class="datenum">13</span>
+        <span class="badges"><span class="badge travel">Travel</span></span>
+      </div>
+      <div class="content">
+        <h2>Departure</h2>
+        <div class="rows">
+          <div class="row"><span class="label">Brunch</span><span class="val"><b>The Bath House Cafe</b> or <b>NEST</b></span></div>
+          <div class="row"><span class="label">Do</span><span class="val">Pack up, fly out.</span></div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <footer>Queenstown, Sept 8–13, 2026 · Snow Machine lineup and running order per the official festival site — confirm set times via the app once published.</footer>
+
+</div>
+
+<script>
+  (function () {
+    var days = Array.prototype.slice.call(document.querySelectorAll('.day'));
+    var today = new Date();
+    var todayStr = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
+    days.forEach(function (d) {
+      if (d.getAttribute('data-date') === todayStr) {
+        d.classList.add('today');
+        var col = d.querySelector('.datecol');
+        var tag = document.createElement('span');
+        tag.className = 'today-tag';
+        tag.textContent = 'Today';
+        col.appendChild(tag);
+      }
+    });
+
+    var links = Array.prototype.slice.call(document.querySelectorAll('.daynav a'));
+    var map = {};
+    links.forEach(function (a) { map[a.getAttribute('href').slice(1)] = a; });
+
+    if ('IntersectionObserver' in window) {
+      var obs = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          var link = map[entry.target.id];
+          if (!link) return;
+          if (entry.isIntersecting) {
+            links.forEach(function (a) { a.classList.remove('active'); });
+            link.classList.add('active');
+          }
+        });
+      }, { rootMargin: '-40% 0px -55% 0px' });
+      days.forEach(function (d) { obs.observe(d); });
+    }
+  })();
+</script>
